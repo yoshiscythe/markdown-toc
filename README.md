@@ -107,6 +107,7 @@ If you want to use a unique setting for a file, you can add attributes to `<!-- 
 - zhiguang Wang(Fix: Recognized code to header list)
 - jgroom33 (Fix: Codeblock error)
 - satokaz (Fix: Codeblock error)
+- [mwhebert:](https://github.com/mwhebert) issue [#20](https://github.com/huntertran/markdown-toc/issues/20)
 
 # 6. What's New?
 <a id="markdown-whats-new" name="whats-new"></a>
