@@ -102,11 +102,11 @@ export class AutoMarkdownToc {
                 editBuilder.insert(new Position(header.range.start.line, 0), this.configManager.options.lineEnding);
             }
 
-            const useHeaderNumbers =  this.configManager.options.ORDERED_LIST.value;
-            editBuilder.replace(header.range, 
-                useHeaderNumbers
-                ? header.fullHeaderWithOrder        // orderedlist=true so update the headers with numbers
-                : header.fullHeaderWithoutOrder);   // orderedlist=true so NO header numbers
+            if (this.configManager.options.ORDERED_LIST.value) {
+                editBuilder.replace(header.range, header.fullHeaderWithOrder);
+            } else {
+                editBuilder.replace(header.range, header.fullHeaderWithoutOrder);
+            }
         });
     }
 
