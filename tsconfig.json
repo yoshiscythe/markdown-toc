@@ -6,7 +6,7 @@
         "sourceMap": true,
         "strict": true,
         "rootDir": "src",
-        "forceConsistentCasingInFileNames": false,
+        "forceConsistentCasingInFileNames": true,
     },
     "exclude": [
         "node_modules",
