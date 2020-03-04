@@ -105,22 +105,22 @@ export class HeaderManager {
             return orderArray;
         }
 
-        let lastheaderInList = headerList[headerList.length - 1];
+        let lastHeaderInList = headerList[headerList.length - 1];
 
-        if (headerBeforePushToList.depth < lastheaderInList.depth) {
+        if (headerBeforePushToList.depth < lastHeaderInList.depth) {
             // continue of the parent level
 
-            let previousheader = undefined;
+            let previousHeader = undefined;
 
             for (let index = headerList.length - 1; index >= 0; index--) {
                 if (headerList[index].depth == headerBeforePushToList.depth) {
-                    previousheader = headerList[index];
+                    previousHeader = headerList[index];
                     break;
                 }
             }
 
-            if (previousheader != undefined) {
-                let orderArray = Object.assign([], previousheader.orderArray);
+            if (previousHeader != undefined) {
+                let orderArray = Object.assign([], previousHeader.orderArray);
                 orderArray[orderArray.length - 1]++;
 
                 return orderArray;
@@ -132,18 +132,18 @@ export class HeaderManager {
             }
         }
 
-        if (headerBeforePushToList.depth > lastheaderInList.depth) {
+        if (headerBeforePushToList.depth > lastHeaderInList.depth) {
             // child level of previous
             // order start with 1
-            let orderArray = Object.assign([], lastheaderInList.orderArray);
+            let orderArray = Object.assign([], lastHeaderInList.orderArray);
             orderArray.push(1);
 
             return orderArray;
         }
 
-        if (headerBeforePushToList.depth == lastheaderInList.depth) {
+        if (headerBeforePushToList.depth == lastHeaderInList.depth) {
             // the same level, increase last item in orderArray
-            let orderArray = Object.assign([], lastheaderInList.orderArray);
+            let orderArray = Object.assign([], lastHeaderInList.orderArray);
             orderArray[orderArray.length - 1]++;
 
             return orderArray;
