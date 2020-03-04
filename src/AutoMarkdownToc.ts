@@ -188,15 +188,15 @@ export class AutoMarkdownToc {
      * @param header
      */
     private insertAnchor(editBuilder: TextEditorEdit, header: Header) {
-        let anchorMatches = header.hash(header.tocWithoutOrder).match(RegexStrings.Instance.REGEXP_ANCHOR);
+        let anchorMatches = header.tocRowWithAnchor(header.tocWithoutOrder).match(RegexStrings.Instance.REGEXP_ANCHOR);
         if (anchorMatches != null) {
             let name = anchorMatches[1];
             let text = [
                 this.configManager.options.lineEnding,
-                '<a id="markdown-',
-                name,
+                '<a id="',
+                header.anchor.id,
                 '" name="',
-                name,
+                header.anchor.name,
                 '"></a>'];
 
             let insertPosition = new Position(header.range.end.line, header.range.end.character);
@@ -288,7 +288,7 @@ export class AutoMarkdownToc {
 
         // TOC with or without link and order
         if (this.configManager.options.WITH_LINKS.value) {
-            row.push(header.hash(this.getTocString(header)));
+            row.push(header.tocRowWithAnchor(this.getTocString(header)));
         } else {
             row.push(this.getTocString(header));
         }

@@ -2,6 +2,7 @@ import { Header } from "./models/Header";
 import { ConfigManager } from "./ConfigManager";
 import { TextDocument, window, Range } from "vscode";
 import { RegexStrings } from "./models/RegexStrings";
+import { Anchor } from "./models/Anchor";
 
 export class HeaderManager {
     configManager: ConfigManager;
@@ -46,6 +47,7 @@ export class HeaderManager {
                     header.orderArray = this.calculateHeaderOrder(header, headerList);
                     header.orderedListString = header.orderArray.join('.') + ".";
                     header.range = new Range(index, 0, index, lineText.length);
+                    header.anchor = new Anchor(header.dirtyTitle);
 
                     if (header.depth <= this.configManager.options.DEPTH_TO.value) {
                         headerList.push(header);
