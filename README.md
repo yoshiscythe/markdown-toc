@@ -12,11 +12,12 @@ Generate TOC (table of contents) of headlines from parsed [markdown](https://en.
 - [1. Features](#1-features)
 - [2. Installation](#2-installation)
 - [3. Usage](#3-usage)
-    - [3.1. Insert TOC](#31-insert-toc)
-    - [3.2. Insert Header Number Sections](#32-insert-header-number-sections)
+  - [3.1. Insert TOC](#31-insert-toc)
+  - [3.2. Insert Header Number Sections](#32-insert-header-number-sections)
+  - [3.3. Ignore Header](#33-ignore-header)
 - [4. Configuration](#4-configuration)
-    - [4.1. Default Settings](#41-default-settings)
-    - [4.2. Unique Settings](#42-unique-settings)
+  - [4.1. Default Settings](#41-default-settings)
+  - [4.2. Unique Settings](#42-unique-settings)
 - [5. Contributors](#5-contributors)
 - [6. What's New?](#6-whats-new)
 - [7. Authors](#7-authors)
@@ -58,6 +59,17 @@ ext install auto-markdown-toc
 **Tips:Section of header is begin with depthFrom**
 
 ![Insert Header Number Sections](img/insert-header-number-sections.gif)
+
+## 3.3. Ignore Header
+<a id="markdown-ignore-header" name="ignore-header"></a>
+To ignore a header, you can add the line `<!-- TOC ignore:true -->` above the header to be ignored.
+
+```
+<!-- TOC ignore:true -->
+# Header to be ignored
+
+# Header that should not be ingored
+```
 
 # 4. Configuration
 <a id="markdown-configuration" name="configuration"></a>

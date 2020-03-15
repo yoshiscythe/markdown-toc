@@ -41,6 +41,11 @@ export class HeaderManager {
 
                 let lineText = doc.lineAt(index).text;
 
+                if (RegexStrings.Instance.REGEXP_IGNORE_TITLE.test(lineText)) {
+                    index += 1
+                    continue
+                }
+
                 let header = this.getHeader(lineText);
 
                 if (header.isHeader) {
