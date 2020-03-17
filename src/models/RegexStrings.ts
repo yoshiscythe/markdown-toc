@@ -4,8 +4,8 @@ export class RegexStrings {
     REGEXP_TOC_CONFIG = /\w+[:=][^\s]+/gi;
     REGEXP_TOC_CONFIG_ITEM = /(\w+)[:=]([^\s]+)/;
     REGEXP_MARKDOWN_ANCHOR = /^<a id="markdown-.+" name=".+"><\/a\>/;
-    REGEXP_CODE_BLOCK1 = /^```/;
-    REGEXP_CODE_BLOCK2 = /^~~~/;
+    REGEXP_CODE_BLOCK1 = /^\s?```/;
+    REGEXP_CODE_BLOCK2 = /^\s?~~~/;
     REGEXP_ANCHOR = /\[.+\]\(#(.+)\)/;
     REGEXP_IGNORE_TITLE = /<!-- TOC ignore:true -->/;
 
