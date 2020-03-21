@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.5] - 2020-03-20
+### Fixed:
+- #21: now option can contains special characters
+- Potential fix for #26, #25, #14: working on linux.
+
 ## [3.0.4] - 2020-02-17
 ### Fixed:
 - #20: orderedlist option not working as expected when disable
