@@ -86,7 +86,7 @@ export class HeaderManager {
             while (this.isLineStartOrEndOfCodeBlock(index, doc) == false && index < doc.lineCount - 1) {
                 index = index + 1;
             }
-            return index + 1;
+            return this.getNextLineIndexIsNotInCode(index + 1, doc);
         }
 
         return index;
