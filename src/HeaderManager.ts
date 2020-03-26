@@ -42,8 +42,8 @@ export class HeaderManager {
                 let lineText = doc.lineAt(index).text;
 
                 if (RegexStrings.Instance.REGEXP_IGNORE_TITLE.test(lineText)) {
-                    index += 1
-                    continue
+                    index += 1;
+                    continue;
                 }
 
                 let header = this.getHeader(lineText);
@@ -80,13 +80,17 @@ export class HeaderManager {
     }
 
     public getNextLineIndexIsNotInCode(index: number, doc: TextDocument) {
+
         if (this.isLineStartOrEndOfCodeBlock(index, doc) && index < doc.lineCount - 1) {
             index = index + 1;
 
             while (this.isLineStartOrEndOfCodeBlock(index, doc) == false && index < doc.lineCount - 1) {
-                index = index + 1;
+                let lineLeft = doc.lineCount - index;
+
+                for (let i = 1; i < lineLeft && this.isLineStartOrEndOfCodeBlock(index, doc) == false; i++) {
+                    index = index + i;
+                }
             }
-            return this.getNextLineIndexIsNotInCode(index + 1, doc);
         }
 
         return index;
