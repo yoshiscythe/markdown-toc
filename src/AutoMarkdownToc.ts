@@ -159,7 +159,7 @@ export class AutoMarkdownToc {
         for (let index = 0; index < doc.lineCount; index++) {
             let lineText = doc.lineAt(index).text;
 
-            if ((start == undefined) && (lineText.match(RegexStrings.Instance.REGEXP_TOC_START))) {
+            if ((start == undefined) && (lineText.match(RegexStrings.Instance.REGEXP_TOC_START) && !lineText.match(RegexStrings.Instance.REGEXP_IGNORE_TITLE))) {
                 start = new Position(index, 0);
             }
             else if (lineText.match(RegexStrings.Instance.REGEXP_TOC_STOP)) {
