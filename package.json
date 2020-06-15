@@ -151,7 +151,7 @@
     },
     "dependencies": {
         "anchor-markdown-header": "^0.5.7",
-        "minimist": ">=0.2.1"
+        "minimist": ">=1.2.3"
     },
     "devDependencies": {
         "@types/node": "^8.10.25",
