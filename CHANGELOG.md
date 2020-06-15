@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.0.7] - 2020-06-14
+## [3.0.8] - 2020-06-14
 ### Fixed:
 - #33: whitespace will be replaced with "-" in anchors
 - #30: remove extra line in bitbucket style
+- Re-package to target linux inconsistency on file naming case.
 
 ## [3.0.5] - 2020-03-20
 ### Fixed:
