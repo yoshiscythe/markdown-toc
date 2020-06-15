@@ -190,7 +190,7 @@ export class AutoMarkdownToc {
     private insertAnchor(editBuilder: TextEditorEdit, header: Header) {
         let anchorMatches = header.tocRowWithAnchor(header.tocWithoutOrder).match(RegexStrings.Instance.REGEXP_ANCHOR);
         if (anchorMatches != null) {
-            let name = anchorMatches[1];
+            // let name = anchorMatches[1];
             let text = [
                 this.configManager.options.lineEnding,
                 '<a id="',
