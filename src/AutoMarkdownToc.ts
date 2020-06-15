@@ -10,6 +10,7 @@ import { ConfigManager } from './ConfigManager';
 import { HeaderManager } from './HeaderManager';
 import { AnchorMode } from './models/AnchorMode';
 import { RegexStrings } from './models/RegexStrings';
+import { start } from 'repl';
 
 export class AutoMarkdownToc {
 
@@ -232,16 +233,25 @@ export class AutoMarkdownToc {
                     continue;
                 }
 
-                // To ensure the anchor will not insert an extra empty line
-                let startPosition = new Position(index, 0);
-                if (index > 0 && doc.lineAt(index).text == this.configManager.options.lineEnding) {
-                    startPosition = new Position(index - 1, 0);
-                }
+                let startPosition = this.getStartPositionOfAnchorLine(index, doc);
 
-                let range = new Range(startPosition, new Position(index + 1, 0));
+                let range = new Range(startPosition, new Position(startPosition.line + 1, 0));
                 editBuilder.delete(range);
             }
         }
+    }
+
+    private getStartPositionOfAnchorLine(index: number, doc: TextDocument){
+        // To ensure the anchor will not insert an extra empty line
+        let startPosition = new Position(index, 0);
+
+        if(this.configManager.options.ANCHOR_MODE.value == AnchorMode.bitbucket) {
+            if (index > 0 && doc.lineAt(index-1).text.length == 0) {
+                startPosition = new Position(index - 2, 0);
+            }
+        }
+
+        return startPosition;
     }
 
     private createToc(editBuilder: TextEditorEdit, headerList: Header[], insertPosition: Position) {

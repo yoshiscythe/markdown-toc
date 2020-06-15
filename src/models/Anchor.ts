@@ -3,7 +3,7 @@ export class Anchor {
     name: string = "";
 
     constructor(headerText:string) {
-        headerText = headerText.replace(" ", "-");
+        headerText = headerText.replace(/\s/gi, "-");
         this.id = "markdown-" + encodeURIComponent(headerText);
         this.name = encodeURIComponent(headerText);
     }
