@@ -44,7 +44,7 @@ export class ConfigManager {
             this.options.tab = " ".repeat(this.options.tabSize);
         }
 
-        if (<string>workspace.getConfiguration("files", null).get("autoSave") != "off") {
+        if (<string>workspace.getConfiguration("files", null).get("autoSave") !== "off") {
             this.options.autoSave = true;
         }
     }
@@ -57,7 +57,7 @@ export class ConfigManager {
         this.options.optionsFlag = [];
 
         let editor = window.activeTextEditor;
-        if (editor == undefined) {
+        if (editor === undefined) {
             return;
         }
 
@@ -67,11 +67,11 @@ export class ConfigManager {
             if (lineText.match(RegexStrings.Instance.REGEXP_TOC_START)) {
                 let options = lineText.match(RegexStrings.Instance.REGEXP_TOC_CONFIG);
 
-                if (options != null) {
+                if (options !== null) {
                     options.forEach(element => {
                         let pair = RegexStrings.Instance.REGEXP_TOC_CONFIG_ITEM.exec(element);
 
-                        if (pair != null) {
+                        if (pair !== null) {
                             let key = pair[1].toLocaleLowerCase();
                             let value = pair[2];
 
@@ -149,7 +149,7 @@ export class ConfigManager {
     }
 
     private parseBool(value: string) {
-        return value.toLocaleLowerCase() == 'true';
+        return value.toLocaleLowerCase() === 'true';
     }
 
     private parseValidNumber(value: string) {

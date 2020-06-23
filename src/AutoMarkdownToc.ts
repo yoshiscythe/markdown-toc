@@ -29,10 +29,10 @@ export class AutoMarkdownToc {
         }
 
         let editor = window.activeTextEditor;
-        if (editor != undefined) {
+        if (editor !== undefined) {
             let doc = editor.document;
 
-            if (doc.languageId != 'markdown') {
+            if (doc.languageId !== 'markdown') {
                 return;
             }
 
@@ -50,7 +50,7 @@ export class AutoMarkdownToc {
         let autoMarkdownToc = this;
         let editor = window.activeTextEditor;
 
-        if (editor == undefined) {
+        if (editor === undefined) {
             return;
         }
 
@@ -81,7 +81,7 @@ export class AutoMarkdownToc {
         let autoMarkdownToc = this;
         let editor = window.activeTextEditor;
 
-        if (editor == undefined) {
+        if (editor === undefined) {
             return;
         }
 
@@ -99,7 +99,7 @@ export class AutoMarkdownToc {
     public updateHeadersWithSections(editBuilder: TextEditorEdit, headerList: Header[], document: TextDocument) {
         headerList.forEach(header => {
 
-            if (header.range.start.line != 0 && !document.lineAt(header.range.start.line - 1).isEmptyOrWhitespace) {
+            if (header.range.start.line !== 0 && !document.lineAt(header.range.start.line - 1).isEmptyOrWhitespace) {
                 editBuilder.insert(new Position(header.range.start.line, 0), this.configManager.options.lineEnding);
             }
 
@@ -118,7 +118,7 @@ export class AutoMarkdownToc {
         let editor = window.activeTextEditor;
         let config = this.configManager;
 
-        if (editor != undefined) {
+        if (editor !== undefined) {
             config.options.isOrderedListDetected = true;
             let document = editor.document;
             editor.edit(editBuilder => {
@@ -133,7 +133,7 @@ export class AutoMarkdownToc {
         let editor = window.activeTextEditor;
         let config = this.configManager;
 
-        if (editor != undefined && headerList != undefined) {
+        if (editor !== undefined && headerList !== undefined) {
             config.options.isOrderedListDetected = false;
             editor.edit(function (editBuilder) {
                 headerList.forEach(element => {
@@ -150,7 +150,7 @@ export class AutoMarkdownToc {
     private getTocRange() {
         let editor = window.activeTextEditor;
 
-        if (editor == undefined) {
+        if (editor === undefined) {
             return new Range(0, 0, 0, 0);
         }
 
@@ -160,7 +160,7 @@ export class AutoMarkdownToc {
         for (let index = 0; index < doc.lineCount; index++) {
             let lineText = doc.lineAt(index).text;
 
-            if ((start == undefined) && (lineText.match(RegexStrings.Instance.REGEXP_TOC_START) && !lineText.match(RegexStrings.Instance.REGEXP_IGNORE_TITLE))) {
+            if ((start === undefined) && (lineText.match(RegexStrings.Instance.REGEXP_TOC_START) && !lineText.match(RegexStrings.Instance.REGEXP_IGNORE_TITLE))) {
                 start = new Position(index, 0);
             }
             else if (lineText.match(RegexStrings.Instance.REGEXP_TOC_STOP)) {
@@ -169,10 +169,10 @@ export class AutoMarkdownToc {
             }
         }
 
-        if ((start == undefined) || (end == undefined)) {
-            if (start != undefined) {
+        if ((start === undefined) || (end === undefined)) {
+            if (start !== undefined) {
                 end = start;
-            } else if (end != undefined) {
+            } else if (end !== undefined) {
                 start = end;
             } else {
                 start = editor.selection.active;
@@ -190,7 +190,7 @@ export class AutoMarkdownToc {
      */
     private insertAnchor(editBuilder: TextEditorEdit, header: Header) {
         let anchorMatches = header.tocRowWithAnchor(header.tocWithoutOrder).match(RegexStrings.Instance.REGEXP_ANCHOR);
-        if (anchorMatches != null) {
+        if (anchorMatches !== null) {
             // let name = anchorMatches[1];
             let text = [
                 this.configManager.options.lineEnding,
@@ -202,7 +202,7 @@ export class AutoMarkdownToc {
 
             let insertPosition = new Position(header.range.end.line, header.range.end.character);
 
-            if (this.configManager.options.ANCHOR_MODE.value == AnchorMode.bitbucket) {
+            if (this.configManager.options.ANCHOR_MODE.value === AnchorMode.bitbucket) {
                 text = text.slice(1);
                 text.push(this.configManager.options.lineEnding);
                 text.push(this.configManager.options.lineEnding);
@@ -225,11 +225,11 @@ export class AutoMarkdownToc {
 
     private deleteAnchors(editBuilder: TextEditorEdit) {
         let editor = window.activeTextEditor;
-        if (editor != undefined) {
+        if (editor !== undefined) {
             let doc = editor.document;
             for (let index = 0; index < doc.lineCount; index++) {
                 let lineText = doc.lineAt(index).text;
-                if (lineText.match(RegexStrings.Instance.REGEXP_MARKDOWN_ANCHOR) == null) {
+                if (lineText.match(RegexStrings.Instance.REGEXP_MARKDOWN_ANCHOR) === null) {
                     continue;
                 }
 
@@ -245,8 +245,8 @@ export class AutoMarkdownToc {
         // To ensure the anchor will not insert an extra empty line
         let startPosition = new Position(index, 0);
 
-        if(this.configManager.options.ANCHOR_MODE.value == AnchorMode.bitbucket) {
-            if (index > 0 && doc.lineAt(index-1).text.length == 0) {
+        if(this.configManager.options.ANCHOR_MODE.value === AnchorMode.bitbucket) {
+            if (index > 0 && doc.lineAt(index-1).text.length === 0) {
                 startPosition = new Position(index - 2, 0);
             }
         }
@@ -329,7 +329,7 @@ export class AutoMarkdownToc {
     private generateCustomOptionsInTocStart(tocStartIndicator: string[]) {
         // custom options
         this.configManager.options.optionsFlag.forEach(optionKey => {
-            if (this.configManager.options.optionsFlag.indexOf(optionKey) != -1) {
+            if (this.configManager.options.optionsFlag.indexOf(optionKey) !== -1) {
                 tocStartIndicator.push(optionKey + ':' + this.configManager.getOptionValueByKey(optionKey) + ' ');
             }
         });

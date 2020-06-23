@@ -27,7 +27,7 @@ export class Header {
     }
 
     public get isHeader(): boolean {
-        return this.headerMark != "";
+        return this.headerMark !== "";
     }
 
     public tocRowWithAnchor(tocString: string): string {

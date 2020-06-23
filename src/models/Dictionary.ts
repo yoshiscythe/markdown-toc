@@ -11,7 +11,7 @@ export class Dictionary {
     }
 
     public get value() {
-        if (this.uniqueValue != undefined) {
+        if (this.uniqueValue !== undefined) {
             return this.uniqueValue;
         }
 

@@ -16,7 +16,7 @@ export class HeaderManager {
 
         let headerTextSplit = lineText.match(RegexStrings.Instance.REGEXP_HEADER_META);
 
-        if (headerTextSplit != null) {
+        if (headerTextSplit !== null) {
             header.headerMark = headerTextSplit[1];
             header.orderedListString = headerTextSplit[2];
             header.dirtyTitle = headerTextSplit[4];
@@ -29,13 +29,13 @@ export class HeaderManager {
         let headerList: Header[] = [];
         let editor = window.activeTextEditor;
 
-        if (editor != undefined) {
+        if (editor !== undefined) {
             let doc = editor.document;
 
             for (let index = 0; index < doc.lineCount; index++) {
                 index = this.getNextLineIndexIsNotInCode(index, doc);
 
-                if (index == doc.lineCount) {
+                if (index === doc.lineCount) {
                     break;
                 }
 
@@ -72,7 +72,7 @@ export class HeaderManager {
         this.configManager.options.isOrderedListDetected = false;
 
         for (let index = 0; index < headerList.length; index++) {
-            if (headerList[index].orderedListString != undefined && headerList[index].orderedListString != '') {
+            if (headerList[index].orderedListString !== undefined && headerList[index].orderedListString !== '') {
                 this.configManager.options.isOrderedListDetected = true;
                 break;
             }
@@ -84,10 +84,10 @@ export class HeaderManager {
         if (this.isLineStartOrEndOfCodeBlock(index, doc) && index < doc.lineCount - 1) {
             index = index + 1;
 
-            while (this.isLineStartOrEndOfCodeBlock(index, doc) == false && index < doc.lineCount - 1) {
+            while (this.isLineStartOrEndOfCodeBlock(index, doc) === false && index < doc.lineCount - 1) {
                 let lineLeft = doc.lineCount - index;
 
-                for (let i = 1; i < lineLeft && this.isLineStartOrEndOfCodeBlock(index, doc) == false; i++) {
+                for (let i = 1; i < lineLeft && this.isLineStartOrEndOfCodeBlock(index, doc) === false; i++) {
                     index = index + i;
                 }
             }
@@ -99,15 +99,15 @@ export class HeaderManager {
     private isLineStartOrEndOfCodeBlock(lineNumber: number, doc: TextDocument) {
         let nextLine = doc.lineAt(lineNumber).text;
 
-        let isCodeStyle1 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK1) != null;
-        let isCodeStyle2 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK2) != null;
+        let isCodeStyle1 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK1) !== null;
+        let isCodeStyle2 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK2) !== null;
 
         return isCodeStyle1 || isCodeStyle2;
     }
 
     public calculateHeaderOrder(headerBeforePushToList: Header, headerList: Header[]) {
 
-        if (headerList.length == 0) {
+        if (headerList.length === 0) {
             // special case: First header
             let orderArray = new Array(headerBeforePushToList.depth);
             orderArray[headerBeforePushToList.depth - 1] = 1;
@@ -122,13 +122,13 @@ export class HeaderManager {
             let previousHeader = undefined;
 
             for (let index = headerList.length - 1; index >= 0; index--) {
-                if (headerList[index].depth == headerBeforePushToList.depth) {
+                if (headerList[index].depth === headerBeforePushToList.depth) {
                     previousHeader = headerList[index];
                     break;
                 }
             }
 
-            if (previousHeader != undefined) {
+            if (previousHeader !== undefined) {
                 let orderArray = Object.assign([], previousHeader.orderArray);
                 orderArray[orderArray.length - 1]++;
 
@@ -150,7 +150,7 @@ export class HeaderManager {
             return orderArray;
         }
 
-        if (headerBeforePushToList.depth == lastHeaderInList.depth) {
+        if (headerBeforePushToList.depth === lastHeaderInList.depth) {
             // the same level, increase last item in orderArray
             let orderArray = Object.assign([], lastHeaderInList.orderArray);
             orderArray[orderArray.length - 1]++;
