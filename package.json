@@ -25,7 +25,7 @@
     "homepage": "https://github.com/huntertran/markdown-toc",
     "publisher": "huntertran",
     "engines": {
-        "vscode": "^1.34.0"
+        "vscode": "^1.46.0"
     },
     "categories": [
         "Other"
@@ -146,17 +146,25 @@
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
-        "lint": "tslint -p ./",
-        "watch": "tsc -watch -p ./"
+        "lint": "eslint src --ext ts",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "test": "node ./out/test/runTest.js"
     },
     "dependencies": {
-        "anchor-markdown-header": "^0.5.7",
-        "minimist": ">=1.2.3"
+        "anchor-markdown-header": "^0.5.7"
     },
     "devDependencies": {
-        "@types/node": "^8.10.25",
-        "@types/vscode": "^1.34.0",
-        "tslint": "^5.20.1",
-        "typescript": "^3.5.1"
+        "@types/vscode": "^1.46.0",
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^13.11.0",
+        "eslint": "^6.8.0",
+        "@typescript-eslint/parser": "^2.30.0",
+        "@typescript-eslint/eslint-plugin": "^2.30.0",
+        "glob": "^7.1.6",
+        "mocha": "^7.1.2",
+        "typescript": "^3.8.3",
+        "vscode-test": "^1.3.0"
     }
 }
