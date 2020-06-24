@@ -1,8 +1,9 @@
 import {
-    Range
+    Range, Position, DocumentSymbol
 } from 'vscode';
 import { AnchorMode } from './AnchorMode';
 import { Anchor } from './Anchor';
+import { RegexStrings } from './RegexStrings';
 
 export class Header {
     headerMark: string = "";
@@ -20,6 +21,19 @@ export class Header {
         this.anchorMode = anchorMode;
         this.range = new Range(0, 0, 0, 0);
         this.anchor = new Anchor("");
+    }
+
+    public convertFromSymbol(symbol: DocumentSymbol) {
+        let headerTextSplit = symbol.name.match(RegexStrings.Instance.REGEXP_HEADER_META);
+
+        if (headerTextSplit !== null) {
+            this.headerMark = headerTextSplit[1];
+            this.orderedListString = headerTextSplit[2];
+            this.dirtyTitle = headerTextSplit[4];
+        }
+
+        this.range = new Range(symbol.range.start, new Position(symbol.range.start.line, symbol.name.length));
+        this.anchor = new Anchor(this.dirtyTitle);
     }
 
     public get depth(): number {

@@ -1,8 +1,7 @@
 import { Header } from "./models/Header";
 import { ConfigManager } from "./ConfigManager";
-import { TextDocument, window, Range } from "vscode";
-import { RegexStrings } from "./models/RegexStrings";
-import { Anchor } from "./models/Anchor";
+import { window, DocumentSymbol, commands, Uri } from "vscode";
+
 
 export class HeaderManager {
     configManager: ConfigManager;
@@ -11,60 +10,108 @@ export class HeaderManager {
         this.configManager = configManager;
     }
 
-    public getHeader(lineText: string) {
-        let header = new Header(this.configManager.options.ANCHOR_MODE.value);
+    // public getHeader(lineText: string) {
+    //     let header = new Header(this.configManager.options.ANCHOR_MODE.value);
 
-        let headerTextSplit = lineText.match(RegexStrings.Instance.REGEXP_HEADER_META);
+    //     let headerTextSplit = lineText.match(RegexStrings.Instance.REGEXP_HEADER_META);
 
-        if (headerTextSplit !== null) {
-            header.headerMark = headerTextSplit[1];
-            header.orderedListString = headerTextSplit[2];
-            header.dirtyTitle = headerTextSplit[4];
-        }
+    //     if (headerTextSplit !== null) {
+    //         header.headerMark = headerTextSplit[1];
+    //         header.orderedListString = headerTextSplit[2];
+    //         header.dirtyTitle = headerTextSplit[4];
+    //     }
 
-        return header;
+    //     return header;
+    // }
+
+    public async GetDocumentSymbols(fileUri: Uri) {
+        return <DocumentSymbol[]>await commands.executeCommand("vscode.executeDocumentSymbolProvider", fileUri);
     }
 
-    public getHeaderList() {
+    public async getHeaderList() {
         let headerList: Header[] = [];
         let editor = window.activeTextEditor;
 
         if (editor !== undefined) {
-            let doc = editor.document;
 
-            for (let index = 0; index < doc.lineCount; index++) {
-                index = this.getNextLineIndexIsNotInCode(index, doc);
+            let fileUri = Uri.file(editor.document.fileName);
 
-                if (index === doc.lineCount) {
-                    break;
-                }
+            let symbols = await this.GetDocumentSymbols(fileUri);
 
-                let lineText = doc.lineAt(index).text;
+            for (let index = 0; index < symbols.length; index++) {
 
-                if (RegexStrings.Instance.REGEXP_IGNORE_TITLE.test(lineText)) {
-                    index += 1;
+                let header = new Header(this.configManager.options.ANCHOR_MODE.value);
+
+                header.convertFromSymbol(symbols[index]);
+
+                // only level 1
+                if (header.depth > 1) {
                     continue;
                 }
 
-                let header = this.getHeader(lineText);
+                header.orderArray = this.calculateHeaderOrder(header, headerList);
+                header.orderedListString = header.orderArray.join('.') + ".";
 
-                if (header.isHeader) {
-                    header.orderArray = this.calculateHeaderOrder(header, headerList);
-                    header.orderedListString = header.orderArray.join('.') + ".";
-                    header.range = new Range(index, 0, index, lineText.length);
-                    header.anchor = new Anchor(header.dirtyTitle);
-
-                    if (header.depth <= this.configManager.options.DEPTH_TO.value) {
-                        headerList.push(header);
-                    }
+                if (header.depth <= this.configManager.options.DEPTH_TO.value) {
+                    headerList.push(header);
+                    this.addHeaderChildren(symbols[index], headerList);
                 }
             }
+
+            // let doc = editor.document;
+
+            // for (let index = 0; index < doc.lineCount; index++) {
+            //     index = this.getNextLineIndexIsNotInCode(index, doc);
+
+            //     if (index === doc.lineCount) {
+            //         break;
+            //     }
+
+            //     let lineText = doc.lineAt(index).text;
+
+            //     if (RegexStrings.Instance.REGEXP_IGNORE_TITLE.test(lineText)) {
+            //         index += 1;
+            //         continue;
+            //     }
+
+            //     let header = this.getHeader(lineText);
+
+            //     if (header.isHeader) {
+            //         header.orderArray = this.calculateHeaderOrder(header, headerList);
+            //         header.orderedListString = header.orderArray.join('.') + ".";
+            //         header.range = new Range(index, 0, index, lineText.length);
+            //         header.anchor = new Anchor(header.dirtyTitle);
+
+            //         if (header.depth <= this.configManager.options.DEPTH_TO.value) {
+            //             headerList.push(header);
+            //         }
+            //     }
+            // }
 
             // violation of clean code
             this.detectAutoOrderedHeader(headerList);
         }
 
         return headerList;
+    }
+
+    private addHeaderChildren(symbol: DocumentSymbol, headerList: Header[]){
+        if(symbol.children.length > 0){
+            for (let index = 0; index < symbol.children.length; index++) {
+
+                let header = new Header(this.configManager.options.ANCHOR_MODE.value);
+
+                header.convertFromSymbol(symbol.children[index]);
+
+                header.orderArray = this.calculateHeaderOrder(header, headerList);
+                header.orderedListString = header.orderArray.join('.') + ".";
+
+                if (header.depth <= this.configManager.options.DEPTH_TO.value) {
+                    headerList.push(header);
+                    this.addHeaderChildren(symbol.children[index], headerList);
+                }
+            }
+        }
     }
 
     private detectAutoOrderedHeader(headerList: Header[]) {
@@ -79,31 +126,31 @@ export class HeaderManager {
         }
     }
 
-    public getNextLineIndexIsNotInCode(index: number, doc: TextDocument) {
+    // public getNextLineIndexIsNotInCode(index: number, doc: TextDocument) {
 
-        if (this.isLineStartOrEndOfCodeBlock(index, doc) && index < doc.lineCount - 1) {
-            index = index + 1;
+    //     if (this.isLineStartOrEndOfCodeBlock(index, doc) && index < doc.lineCount - 1) {
+    //         index = index + 1;
 
-            while (this.isLineStartOrEndOfCodeBlock(index, doc) === false && index < doc.lineCount - 1) {
-                let lineLeft = doc.lineCount - index;
+    //         while (this.isLineStartOrEndOfCodeBlock(index, doc) === false && index < doc.lineCount - 1) {
+    //             let lineLeft = doc.lineCount - index;
 
-                for (let i = 1; i < lineLeft && this.isLineStartOrEndOfCodeBlock(index, doc) === false; i++) {
-                    index = index + i;
-                }
-            }
-        }
+    //             for (let i = 1; i < lineLeft && this.isLineStartOrEndOfCodeBlock(index, doc) === false; i++) {
+    //                 index = index + i;
+    //             }
+    //         }
+    //     }
 
-        return index;
-    }
+    //     return index;
+    // }
 
-    private isLineStartOrEndOfCodeBlock(lineNumber: number, doc: TextDocument) {
-        let nextLine = doc.lineAt(lineNumber).text;
+    // private isLineStartOrEndOfCodeBlock(lineNumber: number, doc: TextDocument) {
+    //     let nextLine = doc.lineAt(lineNumber).text;
 
-        let isCodeStyle1 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK1) !== null;
-        let isCodeStyle2 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK2) !== null;
+    //     let isCodeStyle1 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK1) !== null;
+    //     let isCodeStyle2 = nextLine.match(RegexStrings.Instance.REGEXP_CODE_BLOCK2) !== null;
 
-        return isCodeStyle1 || isCodeStyle2;
-    }
+    //     return isCodeStyle1 || isCodeStyle2;
+    // }
 
     public calculateHeaderOrder(headerBeforePushToList: Header, headerList: Header[]) {
 

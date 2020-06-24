@@ -10,7 +10,6 @@ import { ConfigManager } from './ConfigManager';
 import { HeaderManager } from './HeaderManager';
 import { AnchorMode } from './models/AnchorMode';
 import { RegexStrings } from './models/RegexStrings';
-import { start } from 'repl';
 
 export class AutoMarkdownToc {
 
@@ -46,7 +45,7 @@ export class AutoMarkdownToc {
         }
     }
 
-    public updateMarkdownToc() {
+    public async updateMarkdownToc() {
         let autoMarkdownToc = this;
         let editor = window.activeTextEditor;
 
@@ -56,21 +55,22 @@ export class AutoMarkdownToc {
 
         autoMarkdownToc.configManager.updateOptions();
         let tocRange = autoMarkdownToc.getTocRange();
-        let headerList = autoMarkdownToc.headerManager.getHeaderList();
+        let headerList = await autoMarkdownToc.headerManager.getHeaderList();
         let document = editor.document;
 
-        editor.edit(editBuilder => {
+        editor.edit(async editBuilder => {
             if (!tocRange.isSingleLine) {
                 editBuilder.delete(tocRange);
                 autoMarkdownToc.deleteAnchors(editBuilder);
             }
 
-            if (this.configManager.options.DETECT_AUTO_SET_SECTION.value) { // } && this.configManager.options.isOrderedListDetected) {
-                autoMarkdownToc.updateHeadersWithSections(editBuilder, headerList, document);
+            // TODO: need to go back to this
+            // if (this.configManager.options.DETECT_AUTO_SET_SECTION.value) { // } && this.configManager.options.isOrderedListDetected) {
+            //     autoMarkdownToc.updateHeadersWithSections(editBuilder, headerList, document);
 
-                //rebuild header list, because headers have changed
-                headerList = autoMarkdownToc.headerManager.getHeaderList();
-            }
+            //     //rebuild header list, because headers have changed
+            //     headerList = await autoMarkdownToc.headerManager.getHeaderList();
+            // }
 
             autoMarkdownToc.createToc(editBuilder, headerList, tocRange.start);
             autoMarkdownToc.insertAnchors(editBuilder, headerList);
@@ -111,10 +111,10 @@ export class AutoMarkdownToc {
         });
     }
 
-    public updateMarkdownSections() {
+    public async updateMarkdownSections() {
         this.configManager.updateOptions();
 
-        let headerList = this.headerManager.getHeaderList();
+        let headerList = await this.headerManager.getHeaderList();
         let editor = window.activeTextEditor;
         let config = this.configManager;
 
@@ -127,9 +127,9 @@ export class AutoMarkdownToc {
         }
     }
 
-    public deleteMarkdownSections() {
+    public async deleteMarkdownSections() {
         this.configManager.updateOptions();
-        let headerList = this.headerManager.getHeaderList();
+        let headerList = await this.headerManager.getHeaderList();
         let editor = window.activeTextEditor;
         let config = this.configManager;
 

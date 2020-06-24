@@ -11,7 +11,7 @@ export function activate(context: ExtensionContext) {
     // create a AutoMarkdownToc
     let autoMarkdownToc = new AutoMarkdownToc();
 
-    let updateMarkdownToc = commands.registerCommand('extension.updateMarkdownToc', () => { autoMarkdownToc.updateMarkdownToc(); });
+    let updateMarkdownToc = commands.registerCommand('extension.updateMarkdownToc', async () => { await autoMarkdownToc.updateMarkdownToc(); });
     let deleteMarkdownToc = commands.registerCommand('extension.deleteMarkdownToc', () => { autoMarkdownToc.deleteMarkdownToc(); });
     let updateMarkdownSections = commands.registerCommand('extension.updateMarkdownSections', () => { autoMarkdownToc.updateMarkdownSections(); });
     let deleteMarkdownSections = commands.registerCommand('extension.deleteMarkdownSections', () => { autoMarkdownToc.deleteMarkdownSections(); });
