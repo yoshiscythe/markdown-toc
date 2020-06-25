@@ -27,7 +27,7 @@ Generate TOC (table of contents) of headlines from parsed [markdown](https://en.
 <!-- /TOC -->
 
 # 1. Features
-<a id="markdown-Features" name="Features"></a>
+<a id="markdown-features" name="features"></a>
 - Insert header number sections.
 - Auto active plugin on markdown
 - Insert anchor for header `<a id="markdown-header" name="header"></a>`
@@ -39,29 +39,29 @@ Generate TOC (table of contents) of headlines from parsed [markdown](https://en.
 - Anchor support for (github.com|nodejs.org|bitbucket.org|ghost.org|gitlab.com).
 
 # 2. Installation
-<a id="markdown-Installation" name="Installation"></a>
+<a id="markdown-installation" name="installation"></a>
 
 ```
 ext install auto-markdown-toc
 ```
 
 # 3. Usage
-<a id="markdown-Usage" name="Usage"></a>
+<a id="markdown-usage" name="usage"></a>
 
 ## 3.1. Insert TOC
-<a id="markdown-Insert-TOC" name="Insert-TOC"></a>
+<a id="markdown-insert-toc" name="insert-toc"></a>
 
 ![Insert TOC](img/insert-toc.gif)
 
 ## 3.2. Insert Header Number Sections
-<a id="markdown-Insert-Header-Number-Sections" name="Insert-Header-Number-Sections"></a>
+<a id="markdown-insert-header-number-sections" name="insert-header-number-sections"></a>
 
 **Tips:Section of header is begin with depthFrom**
 
 ![Insert Header Number Sections](img/insert-header-number-sections.gif)
 
 ## 3.3. Ignore Header
-<a id="markdown-Ignore-Header" name="Ignore-Header"></a>
+<a id="markdown-ignore-header" name="ignore-header"></a>
 To ignore a header, you can add the line `<!-- TOC ignore:true -->` above the header to be ignored.
 
 ```
@@ -72,7 +72,7 @@ To ignore a header, you can add the line `<!-- TOC ignore:true -->` above the he
 ```
 
 # 4. Configuration
-<a id="markdown-Configuration" name="Configuration"></a>
+<a id="markdown-configuration" name="configuration"></a>
 
 |attributes|values|defaults|
 |---|---|---|
@@ -86,7 +86,7 @@ To ignore a header, you can add the line `<!-- TOC ignore:true -->` above the he
 |anchorMode|github.com/bitbucket.org/ghost.org/gitlab.com|github.com|
 
 ## 4.1. Default Settings
-<a id="markdown-Default-Settings" name="Default-Settings"></a>
+<a id="markdown-default-settings" name="default-settings"></a>
 
 To change the default configuration settings for the `Auto Markdown TOC` extension, edit the user or workspace settings as described here. The available settings are as follows:
 
@@ -102,10 +102,16 @@ To change the default configuration settings for the `Auto Markdown TOC` extensi
 |markdown-toc.anchorMode|enum|github.com|
 
 ## 4.2. Unique Settings
-<a id="markdown-Unique-Settings" name="Unique-Settings"></a>
+<a id="markdown-unique-settings" name="unique-settings"></a>
+
+```
+<!-- TOC depthFrom:2 orderedList:true -->
+
+<!-- /TOC -->
+```
 
 # 5. Contributors
-<a id="markdown-Contributors" name="Contributors"></a>
+<a id="markdown-contributors" name="contributors"></a>
 
 - sine sawtooth (Add: Header number section)
 - chriscamicas (Update: Anchor generation)
@@ -117,12 +123,12 @@ To change the default configuration settings for the `Auto Markdown TOC` extensi
 - [mwhebert:](https://github.com/mwhebert) issue [#20](https://github.com/huntertran/markdown-toc/issues/20)
 
 # 6. What's New?
-<a id="markdown-What's-New%3F" name="What's-New%3F"></a>
+<a id="markdown-what's-new%3F" name="what's-new%3F"></a>
 [CHANGELOG](https://github.com/huntertran/markdown-toc/blob/master/CHANGELOG.md)
 
 
 # 7. Authors
-<a id="markdown-Authors" name="Authors"></a>
+<a id="markdown-authors" name="authors"></a>
 
 This forked repository is maintained by me and anyone who would like to contribute. The EOL fixed was contributed by [roborourke](https://github.com/roborourke/markdown-toc.git) and any one open new pull request with the hope of fixing the problem.
 
@@ -132,10 +138,10 @@ The original code is created by Alan Walk. If you have any questions, contact hi
 - Github : [AlanWalk](https://github.com/AlanWalk)
 
 # 8. License
-<a id="markdown-License" name="License"></a>
+<a id="markdown-license" name="license"></a>
 The package is Open Source Software released under the [MIT License](LICENSE). It's developed by AlanWalk, maintained by Hunter Tran
 
 # 9. Links
-<a id="markdown-Links" name="Links"></a>
+<a id="markdown-links" name="links"></a>
 - [Source Code](https://github.com/huntertran/markdown-toc)
 - [Market](https://marketplace.visualstudio.com/items?itemName=huntertran.auto-markdown-toc)

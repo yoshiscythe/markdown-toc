@@ -10,6 +10,7 @@ import { ConfigManager } from './ConfigManager';
 import { HeaderManager } from './HeaderManager';
 import { AnchorMode } from './models/AnchorMode';
 import { RegexStrings } from './models/RegexStrings';
+import { Utilities } from './Utilities';
 
 export class AutoMarkdownToc {
 
@@ -158,6 +159,11 @@ export class AutoMarkdownToc {
         let start, end: Position | undefined;
 
         for (let index = 0; index < doc.lineCount; index++) {
+
+            if (Utilities.isLineStartOrEndOfCodeBlock(index, doc)) {
+                index = Utilities.getNextLineIndexIsNotInCode(index, doc);
+            }
+
             let lineText = doc.lineAt(index).text;
 
             if ((start === undefined) && (lineText.match(RegexStrings.Instance.REGEXP_TOC_START) && !lineText.match(RegexStrings.Instance.REGEXP_IGNORE_TITLE))) {
@@ -241,12 +247,12 @@ export class AutoMarkdownToc {
         }
     }
 
-    private getStartPositionOfAnchorLine(index: number, doc: TextDocument){
+    private getStartPositionOfAnchorLine(index: number, doc: TextDocument) {
         // To ensure the anchor will not insert an extra empty line
         let startPosition = new Position(index, 0);
 
-        if(this.configManager.options.ANCHOR_MODE.value === AnchorMode.bitbucket) {
-            if (index > 0 && doc.lineAt(index-1).text.length === 0) {
+        if (this.configManager.options.ANCHOR_MODE.value === AnchorMode.bitbucket) {
+            if (index > 0 && doc.lineAt(index - 1).text.length === 0) {
                 startPosition = new Position(index - 2, 0);
             }
         }
