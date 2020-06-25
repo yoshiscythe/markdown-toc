@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.9] - 2020-06-24
+### New
+- use VSCode API to get header list
+- improve performance
+
 ## [3.0.8] - 2020-06-14
 ### Fixed:
 - #33: whitespace will be replaced with "-" in anchors
