@@ -33,7 +33,7 @@ export class Header {
         }
 
         this.range = new Range(symbol.range.start, new Position(symbol.range.start.line, symbol.name.length));
-        this.anchor = new Anchor(this.dirtyTitle);
+        this.anchor = new Anchor(this.cleanUpTitle(this.dirtyTitle));
     }
 
     public get depth(): number {
@@ -69,7 +69,7 @@ export class Header {
     private cleanUpTitle(dirtyTitle: string) {
         let title = dirtyTitle.replace(/\[(.+)]\([^)]*\)/gi, "$1"); // replace link
         title = title.replace(/<!--.+-->/gi, ""); // replace comment
-        title = title.replace(/\#*_/gi, "").trim(); // replace special char
+        title = title.replace(/\#*`|\(|\)/gi, "").trim(); // replace special char
         return title;
     }
 }
