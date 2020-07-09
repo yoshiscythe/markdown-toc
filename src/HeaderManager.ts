@@ -1,7 +1,6 @@
 import { Header } from "./models/Header";
 import { ConfigManager } from "./ConfigManager";
-import { window, DocumentSymbol, commands, Uri, TextDocument } from "vscode";
-import { RegexStrings } from "./models/RegexStrings";
+import { window, DocumentSymbol, commands, Uri } from "vscode";
 
 
 export class HeaderManager {
@@ -25,14 +24,19 @@ export class HeaderManager {
 
             let symbols = await this.getDocumentSymbols(fileUri);
 
-            for (let index = 0; index < symbols.length; index++) {
+            let headerLevels = new Map<number, number>();
+            let allHeaders = new Array<Header>();
 
-                let header = new Header(this.configManager.options.ANCHOR_MODE.value);
+            this.convertAllFirstLevelHeader(symbols, allHeaders, headerLevels);
 
-                header.convertFromSymbol(symbols[index]);
+            let consideredDepthToInclude = this.getMostPopularHeaderDepth(headerLevels);
 
-                // only level 1
-                if (header.depth > 1) {
+
+            for (let index = 0; index < allHeaders.length; index++) {
+                let header = allHeaders[index];
+
+                // only level of consideredDepthToInclude
+                if (header.depth > consideredDepthToInclude) {
                     continue;
                 }
 
@@ -50,6 +54,38 @@ export class HeaderManager {
         }
 
         return headerList;
+    }
+
+    private getMostPopularHeaderDepth(headerLevels: Map<number, number>) {
+        let mostPopularHeaderDepth = 0;
+        let mostPopularHeaderDepthCount = 0;
+
+        headerLevels.forEach((value: number, key: number) => {
+            if (value >= mostPopularHeaderDepth) {
+                mostPopularHeaderDepthCount = value;
+                mostPopularHeaderDepth = key;
+            }
+        });
+
+        return mostPopularHeaderDepth;
+    }
+
+    private convertAllFirstLevelHeader(symbols: DocumentSymbol[], allHeaders: Header[], headerLevels: Map<number, number>) {
+        for (let index = 0; index < symbols.length; index++) {
+            let header = new Header(this.configManager.options.ANCHOR_MODE.value);
+            header.convertFromSymbol(symbols[index]);
+            allHeaders.push(header);
+
+            let depthCount = headerLevels.get(header.depth);
+
+            if (depthCount === undefined) {
+                headerLevels.set(header.depth, 1);
+            }
+            else {
+                depthCount = depthCount + 1;
+                headerLevels.set(header.depth, depthCount);
+            }
+        }
     }
 
     private addHeaderChildren(symbol: DocumentSymbol, headerList: Header[]) {
