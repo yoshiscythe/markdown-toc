@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.11] - 2020-07-09
+### Fixed:
+- [#35](https://github.com/huntertran/markdown-toc/issues/35): implement a new algorithm to ignore title of Github markdown style
+
 ## [3.0.10] - 2020-07-01
 ### Fixed:
 - #8: reserve underscore
