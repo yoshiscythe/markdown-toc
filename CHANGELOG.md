@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.12] - 2020-09-13
+### Fixed:
+- [#40](https://github.com/huntertran/markdown-toc/issues/35): check if a header is ignored or not
+
 ## [3.0.11] - 2020-07-09
 ### Fixed:
 - [#35](https://github.com/huntertran/markdown-toc/issues/35): implement a new algorithm to ignore title of Github markdown style
