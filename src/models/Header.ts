@@ -11,6 +11,8 @@ export class Header {
     dirtyTitle: string = "";
     range: Range;
 
+    isIgnored: boolean = false;
+
     orderArray: number[] = [];
 
     anchorMode: AnchorMode = AnchorMode.github;
