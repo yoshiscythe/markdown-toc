@@ -1,6 +1,7 @@
 import { Header } from "./models/Header";
 import { ConfigManager } from "./ConfigManager";
-import { window, DocumentSymbol, commands, Uri } from "vscode";
+import { window, DocumentSymbol, commands, Uri, TextEditor } from "vscode";
+import { RegexStrings } from "./models/RegexStrings";
 
 
 export class HeaderManager {
@@ -40,12 +41,14 @@ export class HeaderManager {
                     continue;
                 }
 
+
+                header.isIgnored = this.getIsHeaderIgnored(header, editor);
                 header.orderArray = this.calculateHeaderOrder(header, headerList);
                 header.orderedListString = header.orderArray.join('.') + ".";
 
                 if (header.depth <= this.configManager.options.DEPTH_TO.value) {
                     headerList.push(header);
-                    this.addHeaderChildren(symbols[index], headerList);
+                    this.addHeaderChildren(symbols[index], headerList, editor);
                 }
             }
 
@@ -54,6 +57,17 @@ export class HeaderManager {
         }
 
         return headerList;
+    }
+
+    private getIsHeaderIgnored(header: Header, editor: TextEditor) {
+        let previousLine = header.range.start.line - 1;
+        if (previousLine > 0) {
+            if (editor.document.lineAt(previousLine).text.match(RegexStrings.Instance.REGEXP_IGNORE_TITLE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private getMostPopularHeaderDepth(headerLevels: Map<number, number>) {
@@ -88,7 +102,7 @@ export class HeaderManager {
         }
     }
 
-    private addHeaderChildren(symbol: DocumentSymbol, headerList: Header[]) {
+    private addHeaderChildren(symbol: DocumentSymbol, headerList: Header[], editor: TextEditor) {
         if (symbol.children.length > 0) {
             for (let index = 0; index < symbol.children.length; index++) {
 
@@ -96,12 +110,14 @@ export class HeaderManager {
 
                 header.convertFromSymbol(symbol.children[index]);
 
+                header.isIgnored = this.getIsHeaderIgnored(header, editor);
+
                 header.orderArray = this.calculateHeaderOrder(header, headerList);
                 header.orderedListString = header.orderArray.join('.') + ".";
 
                 if (header.depth <= this.configManager.options.DEPTH_TO.value) {
                     headerList.push(header);
-                    this.addHeaderChildren(symbol.children[index], headerList);
+                    this.addHeaderChildren(symbol.children[index], headerList, editor);
                 }
             }
         }
