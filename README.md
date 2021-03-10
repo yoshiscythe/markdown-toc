@@ -85,6 +85,14 @@ To ignore a header, you can add the line `<!-- TOC ignore:true -->` above the he
 |updateOnSave|bool|true|
 |anchorMode|github.com/bitbucket.org/ghost.org/gitlab.com|github.com|
 
+By default, `vscode` use 4 spaces for tab. You can change that number specifically for markdown by adding this to your `settings.json`
+
+```json
+    "[markdown]": {
+        "editor.tabSize": 2
+    },
+```
+
 ## 4.1. Default Settings
 <a id="markdown-default-settings" name="default-settings"></a>
 
