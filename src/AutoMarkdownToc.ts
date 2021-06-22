@@ -393,7 +393,7 @@ export class AutoMarkdownToc {
     }
 
     private getBeforeHeadingSentinel(headerList: Header[], sentinel: string) {
-        let sentinelIndex;
+        let sentinelIndex = 0;
         for (let index = 0; index < headerList.length; index++) {
             let header = headerList[index];
 
