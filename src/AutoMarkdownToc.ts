@@ -377,7 +377,7 @@ export class AutoMarkdownToc {
 
         // forEachはArrayのメソッド．与えられた関数を、配列の各要素に対して一度ずつ実行
         headerList.forEach(header => {
-            if (header.tocWithOrder == beforeHeadingSentinel && !header.isIgnored) {
+            if (header == beforeHeadingSentinel && !header.isIgnored) {
                 let row = this.generateTocRow(header, minimumRenderedDepth);
                 tocRows.push(row);
             }
@@ -393,7 +393,7 @@ export class AutoMarkdownToc {
     }
 
     private getBeforeHeadingSentinel(headerList: Header[], sentinel: string) {
-        var sentinelIndex: Number;
+        let sentinelIndex;
         for (let index = 0; index < headerList.length; index++) {
             let header = headerList[index];
 

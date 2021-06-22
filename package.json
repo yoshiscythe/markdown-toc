@@ -147,7 +147,7 @@
                 "markdown-toc.sentinelHeading": {
                     "type": "string",
                     "default": "-",
-                    "description": "最新の日記の直後の見出し",
+                    "description": "最新の日記の直後の見出し"
                 }
             }
         }
