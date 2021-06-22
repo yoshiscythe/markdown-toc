@@ -19,6 +19,7 @@ var Options = /** @class */ (function () {
         this.ANCHOR_MODE = new Dictionary_1.Dictionary("anchorMode", AnchorMode_1.AnchorMode.github);
         this.BULLET_CHAR = new Dictionary_1.Dictionary("bulletCharacter", "-");
         this.DETECT_AUTO_SET_SECTION = new Dictionary_1.Dictionary("detectAndAutoSetSection", false);
+        this.SENTINEL_HEADING = new Dictionary_1.Dictionary("sentinelHeading", "-");
         this.extensionName = "markdown-toc";
         this.EOL = require('os').EOL;
         // language configuration

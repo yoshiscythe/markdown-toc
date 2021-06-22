@@ -43,6 +43,15 @@ function activate(context) {
     var _this = this;
     // create a AutoMarkdownToc
     var autoMarkdownToc = new AutoMarkdownToc_1.AutoMarkdownToc();
+    // コマンドの中身をautoMarkdownTocから参照してる
+    var updateLatestDiaryLink = vscode_1.commands.registerCommand('extension.updateLatestDiaryLink', function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, autoMarkdownToc.updateLatestDiaryLink()];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    }); }); });
     var updateMarkdownToc = vscode_1.commands.registerCommand('extension.updateMarkdownToc', function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, autoMarkdownToc.updateMarkdownToc()];
@@ -56,11 +65,14 @@ function activate(context) {
     var deleteMarkdownSections = vscode_1.commands.registerCommand('extension.deleteMarkdownSections', function () { autoMarkdownToc.deleteMarkdownSections(); });
     // Events
     var saveMarkdownToc = vscode_1.workspace.onDidSaveTextDocument(function () { autoMarkdownToc.onDidSaveTextDocument(); });
+    var saveLatestDiaryLink = vscode_1.workspace.onDidSaveTextDocument(function () { autoMarkdownToc.onDidSaveTextDocument4Diary(); });
     // Add to a list of disposables which are disposed when this extension is deactivated.
+    context.subscriptions.push(updateLatestDiaryLink);
     context.subscriptions.push(updateMarkdownToc);
     context.subscriptions.push(deleteMarkdownToc);
     context.subscriptions.push(updateMarkdownSections);
     context.subscriptions.push(deleteMarkdownSections);
+    context.subscriptions.push(saveLatestDiaryLink);
     context.subscriptions.push(saveMarkdownToc);
 }
 exports.activate = activate;

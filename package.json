@@ -7,23 +7,21 @@
     "icon": "img/markdown-toc.png",
     "license": "MIT",
     "author": {
-        "email": "hunter.tran.92@gmail.com",
-        "name": "Hunter Tran",
-        "url": "https://coding4food.net/"
+        "email": "yoshicythe@gmail.com",
+        "name": "yoshiscythe"
     },
     "bugs": {
-        "url": "https://github.com/huntertran/markdown-toc/issues"
+        "url": "https://github.com/yoshiscythe/markdown-toc/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/huntertran/markdown-toc.git"
+        "url": "https://github.com/yoshiscythe/markdown-toc.git"
     },
     "keywords": [
         "markdown",
         "toc"
     ],
-    "homepage": "https://github.com/huntertran/markdown-toc",
-    "publisher": "huntertran",
+    "publisher": "yoshiscythe",
     "engines": {
         "vscode": "^1.46.0"
     },
@@ -31,9 +29,14 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:markdown"
+        "onLanguage:markdown",
+        "onCommand:extension.updateLatestDiaryLink",
+        "onCommand:extension.updateMarkdownToc",
+        "onCommand:extension.deleteMarkdownToc",
+        "onCommand:extension.updateMarkdownSections",
+        "onCommand:extension.deleteMarkdownSections"
     ],
-    "main": "./out/extension.js",
+    "main": "src/extension.js",
     "contributes": {
         "commands": [
             {

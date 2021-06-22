@@ -71,6 +71,31 @@ var AutoMarkdownToc = /** @class */ (function () {
             }
         }
     };
+    // onDidSaveTextDocumentをフォーク
+    // save時にupdateLatestDiaryLinkをやってくれそう
+    AutoMarkdownToc.prototype.onDidSaveTextDocument4Diary = function () {
+        if (!this.configManager.options.UPDATE_ON_SAVE.value) {
+            return;
+        }
+        // Prevent save loop
+        if (this.configManager.options.isProgrammaticallySave) {
+            this.configManager.options.isProgrammaticallySave = false;
+            return;
+        }
+        var editor = vscode_1.window.activeTextEditor;
+        if (editor !== undefined) {
+            var doc = editor.document;
+            if (doc.languageId !== 'markdown') {
+                return;
+            }
+            var tocRange = this.getTocRange();
+            if (!tocRange.isSingleLine) {
+                this.updateLatestDiaryLink();
+                this.configManager.options.isProgrammaticallySave = true;
+                doc.save();
+            }
+        }
+    };
     AutoMarkdownToc.prototype.updateMarkdownToc = function () {
         return __awaiter(this, void 0, void 0, function () {
             var autoMarkdownToc, editor, tocRange, headerList, document;
@@ -102,6 +127,48 @@ var AutoMarkdownToc = /** @class */ (function () {
                                 //     headerList = await autoMarkdownToc.headerManager.getHeaderList();
                                 // }
                                 autoMarkdownToc.createToc(editBuilder, headerList, tocRange.start);
+                                autoMarkdownToc.insertAnchors(editBuilder, headerList);
+                                return [2 /*return*/];
+                            });
+                        }); });
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // updateMarkdownTocが雛形
+    AutoMarkdownToc.prototype.updateLatestDiaryLink = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var autoMarkdownToc, editor, tocRange, headerList, document;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        autoMarkdownToc = this;
+                        editor = vscode_1.window.activeTextEditor;
+                        if (editor === undefined) {
+                            return [2 /*return*/];
+                        }
+                        autoMarkdownToc.configManager.updateOptions();
+                        tocRange = autoMarkdownToc.getTocRange();
+                        return [4 /*yield*/, autoMarkdownToc.headerManager.getHeaderList()];
+                    case 1:
+                        headerList = _a.sent();
+                        document = editor.document;
+                        editor.edit(function (editBuilder) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                if (!tocRange.isSingleLine) {
+                                    editBuilder.delete(tocRange);
+                                    autoMarkdownToc.deleteAnchors(editBuilder);
+                                }
+                                // TODO: need to go back to this
+                                // if (this.configManager.options.DETECT_AUTO_SET_SECTION.value) { // } && this.configManager.options.isOrderedListDetected) {
+                                //     autoMarkdownToc.updateHeadersWithSections(editBuilder, headerList, document);
+                                //     //rebuild header list, because headers have changed
+                                //     headerList = await autoMarkdownToc.headerManager.getHeaderList();
+                                // }
+                                // createToc->createLatestDiaryLinkへ変更
+                                autoMarkdownToc.createLatestDiaryLink(editBuilder, headerList, tocRange.start);
                                 autoMarkdownToc.insertAnchors(editBuilder, headerList);
                                 return [2 /*return*/];
                             });
@@ -311,6 +378,45 @@ var AutoMarkdownToc = /** @class */ (function () {
         text.push(this.configManager.options.lineEnding + "<!-- /TOC -->");
         // insert
         editBuilder.insert(insertPosition, text.join(this.configManager.options.lineEnding));
+    };
+    // createTocが雛形
+    AutoMarkdownToc.prototype.createLatestDiaryLink = function (editBuilder, headerList, insertPosition) {
+        var _this = this;
+        var text = [];
+        //// TOC STAT: the custom option IS inside the toc start.
+        text = text.concat(this.generateTocStartIndicator());
+        //// HEADERS
+        var minimumRenderedDepth = headerList[0].depth;
+        headerList.forEach(function (header) {
+            minimumRenderedDepth = Math.min(minimumRenderedDepth, header.depth);
+        });
+        var tocRows = [];
+        var sentinel = this.configManager.options.SENTINEL_HEADING.value;
+        var beforeHeadingSentinel = this.getBeforeHeadingSentinel(headerList, sentinel);
+        // forEachはArrayのメソッド．与えられた関数を、配列の各要素に対して一度ずつ実行
+        headerList.forEach(function (header) {
+            if (header == beforeHeadingSentinel && !header.isIgnored) {
+                var row = _this.generateTocRow(header, minimumRenderedDepth);
+                tocRows.push(row);
+            }
+        });
+        text.push(tocRows.join(this.configManager.options.lineEnding));
+        //// TOC END
+        text.push(this.configManager.options.lineEnding + "<!-- /TOC -->");
+        // insert
+        editBuilder.insert(insertPosition, text.join(this.configManager.options.lineEnding));
+    };
+    AutoMarkdownToc.prototype.getBeforeHeadingSentinel = function (headerList, sentinel) {
+        var sentinelIndex = 0;
+        for (var index = 0; index < headerList.length; index++) {
+            var header = headerList[index];
+            if (header.tocWithOrder == sentinel) {
+                sentinelIndex = index;
+                break;
+            }
+        }
+        var beforeHeadingSentinel = headerList[sentinelIndex];
+        return beforeHeadingSentinel;
     };
     AutoMarkdownToc.prototype.generateTocRow = function (header, minimumRenderedDepth) {
         var row = [];
