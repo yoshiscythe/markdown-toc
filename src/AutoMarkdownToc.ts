@@ -46,6 +46,37 @@ export class AutoMarkdownToc {
         }
     }
 
+    // onDidSaveTextDocumentをフォーク
+    // save時にupdateLatestDiaryLinkをやってくれそう
+    public onDidSaveTextDocument4Diary() {
+        if (!this.configManager.options.UPDATE_ON_SAVE.value) {
+            return;
+        }
+
+        // Prevent save loop
+        if (this.configManager.options.isProgrammaticallySave) {
+            this.configManager.options.isProgrammaticallySave = false;
+            return;
+        }
+
+        let editor = window.activeTextEditor;
+        if (editor !== undefined) {
+            let doc = editor.document;
+
+            if (doc.languageId !== 'markdown') {
+                return;
+            }
+
+            let tocRange = this.getTocRange();
+
+            if (!tocRange.isSingleLine) {
+                this.updateLatestDiaryLink();
+                this.configManager.options.isProgrammaticallySave = true;
+                doc.save();
+            }
+        }
+    }
+
     public async updateMarkdownToc() {
         let autoMarkdownToc = this;
         let editor = window.activeTextEditor;
@@ -74,6 +105,40 @@ export class AutoMarkdownToc {
             // }
 
             autoMarkdownToc.createToc(editBuilder, headerList, tocRange.start);
+            autoMarkdownToc.insertAnchors(editBuilder, headerList);
+        });
+    }
+
+    // updateMarkdownTocが雛形
+    public async updateLatestDiaryLink() {
+        let autoMarkdownToc = this;
+        let editor = window.activeTextEditor;
+
+        if (editor === undefined) {
+            return;
+        }
+
+        autoMarkdownToc.configManager.updateOptions();
+        let tocRange = autoMarkdownToc.getTocRange();
+        let headerList = await autoMarkdownToc.headerManager.getHeaderList();
+        let document = editor.document;
+
+        editor.edit(async editBuilder => {
+            if (!tocRange.isSingleLine) {
+                editBuilder.delete(tocRange);
+                autoMarkdownToc.deleteAnchors(editBuilder);
+            }
+
+            // TODO: need to go back to this
+            // if (this.configManager.options.DETECT_AUTO_SET_SECTION.value) { // } && this.configManager.options.isOrderedListDetected) {
+            //     autoMarkdownToc.updateHeadersWithSections(editBuilder, headerList, document);
+
+            //     //rebuild header list, because headers have changed
+            //     headerList = await autoMarkdownToc.headerManager.getHeaderList();
+            // }
+
+            // createToc->createLatestDiaryLinkへ変更
+            autoMarkdownToc.createLatestDiaryLink(editBuilder, headerList, tocRange.start);
             autoMarkdownToc.insertAnchors(editBuilder, headerList);
         });
     }
@@ -289,6 +354,58 @@ export class AutoMarkdownToc {
 
         // insert
         editBuilder.insert(insertPosition, text.join(this.configManager.options.lineEnding));
+    }
+
+    // createTocが雛形
+    private createLatestDiaryLink(editBuilder: TextEditorEdit, headerList: Header[], insertPosition: Position) {
+
+        let text: string[] = [];
+
+        //// TOC STAT: the custom option IS inside the toc start.
+        text = text.concat(this.generateTocStartIndicator());
+
+        //// HEADERS
+        let minimumRenderedDepth = headerList[0].depth;
+        headerList.forEach(header => {
+            minimumRenderedDepth = Math.min(minimumRenderedDepth, header.depth);
+        });
+
+        let tocRows: string[] = [];
+
+        let sentinel: string = this.configManager.options.SENTINEL_HEADING.value;
+        let beforeHeadingSentinel: Header = this.getBeforeHeadingSentinel(headerList, sentinel)
+
+        // forEachはArrayのメソッド．与えられた関数を、配列の各要素に対して一度ずつ実行
+        headerList.forEach(header => {
+            if (header.tocWithOrder == beforeHeadingSentinel && !header.isIgnored) {
+                let row = this.generateTocRow(header, minimumRenderedDepth);
+                tocRows.push(row);
+            }
+        });
+
+        text.push(tocRows.join(this.configManager.options.lineEnding));
+
+        //// TOC END
+        text.push(this.configManager.options.lineEnding + "<!-- /TOC -->");
+
+        // insert
+        editBuilder.insert(insertPosition, text.join(this.configManager.options.lineEnding));
+    }
+
+    private getBeforeHeadingSentinel(headerList: Header[], sentinel: string) {
+        var sentinelIndex: Number;
+        for (let index = 0; index < headerList.length; index++) {
+            let header = headerList[index];
+
+            if (header.tocWithOrder == sentinel) {
+                sentinelIndex = index;
+                break;
+            }
+        }
+
+        let beforeHeadingSentinel: Header = headerList[sentinelIndex];
+
+        return beforeHeadingSentinel
     }
 
     private generateTocRow(header: Header, minimumRenderedDepth: number) {

@@ -37,6 +37,10 @@
     "contributes": {
         "commands": [
             {
+                "command": "extension.updateLatestDiaryLink",
+                "title": "Auto Markdown TOC: Insert/Update LatestDiaryLink"
+            },
+            {
                 "command": "extension.updateMarkdownToc",
                 "title": "Auto Markdown TOC: Insert/Update"
             },
@@ -139,6 +143,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Auto set header sections when detected"
+                },
+                "markdown-toc.sentinelHeading": {
+                    "type": "string",
+                    "default": "-",
+                    "description": "最新の日記の直後の見出し",
                 }
             }
         }

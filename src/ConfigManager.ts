@@ -24,6 +24,7 @@ export class ConfigManager {
         this.options.ANCHOR_MODE.workspaceValue = <string>workspace.getConfiguration(this.options.extensionName).get(this.options.ANCHOR_MODE.key);
         this.options.BULLET_CHAR.workspaceValue = <string>workspace.getConfiguration(this.options.extensionName).get(this.options.BULLET_CHAR.key);
         this.options.DETECT_AUTO_SET_SECTION.workspaceValue = <boolean>workspace.getConfiguration(this.options.extensionName).get(this.options.DETECT_AUTO_SET_SECTION.key);
+        this.options.SENTINEL_HEADING.workspaceValue = <boolean>workspace.getConfiguration(this.options.extensionName).get(this.options.SENTINEL_HEADING.key);
 
         this.options.lineEnding = <string>workspace.getConfiguration("files", null).get("eol");
         if (this.options.lineEnding === 'auto') {
@@ -112,6 +113,10 @@ export class ConfigManager {
                                     this.options.optionsFlag.push(key);
                                     this.options.DETECT_AUTO_SET_SECTION.uniqueValue = value;
                                     break;
+                                case this.options.SENTINEL_HEADING.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.SENTINEL_HEADING.uniqueValue = value;
+                                    break;
                             }
                         }
                     });
@@ -145,6 +150,8 @@ export class ConfigManager {
                 return this.options.BULLET_CHAR.value;
             case this.options.DETECT_AUTO_SET_SECTION.lowerCaseKey:
                 return this.options.DETECT_AUTO_SET_SECTION.value;
+            case this.options.SENTINEL_HEADING.lowerCaseKey:
+                return this.options.SENTINEL_HEADING.value;
         }
     }
 

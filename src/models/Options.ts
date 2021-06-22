@@ -18,6 +18,7 @@ export class Options {
     ANCHOR_MODE: Dictionary = new Dictionary("anchorMode", AnchorMode.github);
     BULLET_CHAR: Dictionary = new Dictionary("bulletCharacter", "-");
     DETECT_AUTO_SET_SECTION: Dictionary = new Dictionary("detectAndAutoSetSection", false);
+    SENTINEL_HEADING: Dictionary = new Dictionary("sentinelHeading", "-");
 
     extensionName: string = "markdown-toc";
     EOL = require('os').EOL;
