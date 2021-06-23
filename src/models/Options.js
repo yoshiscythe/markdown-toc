@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Options = void 0;
-var Dictionary_1 = require("./Dictionary");
-var AnchorMode_1 = require("./AnchorMode");
-var Options = /** @class */ (function () {
-    function Options() {
+const Dictionary_1 = require("./Dictionary");
+const AnchorMode_1 = require("./AnchorMode");
+class Options {
+    constructor() {
         // current document options
         this.optionsFlag = [];
         this.isProgrammaticallySave = false;
@@ -30,6 +30,6 @@ var Options = /** @class */ (function () {
         // special characters
         this.tab = '\t';
     }
-    return Options;
-}());
+}
 exports.Options = Options;
+//# sourceMappingURL=Options.js.map

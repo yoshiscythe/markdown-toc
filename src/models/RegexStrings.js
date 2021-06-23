@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegexStrings = void 0;
-var RegexStrings = /** @class */ (function () {
-    function RegexStrings() {
+class RegexStrings {
+    constructor() {
         this.REGEXP_TOC_START = /\s*<!--(.*)[^\/]TOC(.*)-->/gi;
         this.REGEXP_TOC_STOP = /\s*<!--(.*)\/TOC(.*)-->/gi;
         this.REGEXP_TOC_CONFIG = /\w+[:=][^\s]+/gi;
@@ -17,13 +17,9 @@ var RegexStrings = /** @class */ (function () {
         this.REGEXP_UNIQUE_CONFIG_STOP = /\s*<!--(.*)\/TOC UNIQUE CONFIGS(.*)-->/gi;
         this.REGEXP_UNIQUE_CONFIG_LINE = /\s*<!--( *)(\w+)[:](\w+)( *)-->/gi;
     }
-    Object.defineProperty(RegexStrings, "Instance", {
-        get: function () {
-            return this._instance || (this._instance = new this());
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RegexStrings;
-}());
+    static get Instance() {
+        return this._instance || (this._instance = new this());
+    }
+}
 exports.RegexStrings = RegexStrings;
+//# sourceMappingURL=RegexStrings.js.map

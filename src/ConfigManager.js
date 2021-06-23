@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigManager = void 0;
-var RegexStrings_1 = require("./models/RegexStrings");
-var Options_1 = require("./models/Options");
-var vscode_1 = require("vscode");
-var ConfigManager = /** @class */ (function () {
-    function ConfigManager() {
+const RegexStrings_1 = require("./models/RegexStrings");
+const Options_1 = require("./models/Options");
+const vscode_1 = require("vscode");
+class ConfigManager {
+    constructor() {
         this.options = new Options_1.Options();
     }
-    ConfigManager.prototype.updateOptions = function () {
+    updateOptions() {
         this.loadConfigurations();
         this.loadCustomOptions();
-    };
-    ConfigManager.prototype.loadConfigurations = function () {
+    }
+    loadConfigurations() {
         this.options.DEPTH_FROM.workspaceValue = vscode_1.workspace.getConfiguration(this.options.extensionName).get(this.options.DEPTH_FROM.key);
         this.options.DEPTH_TO.workspaceValue = vscode_1.workspace.getConfiguration(this.options.extensionName).get(this.options.DEPTH_TO.key);
         this.options.INSERT_ANCHOR.workspaceValue = vscode_1.workspace.getConfiguration(this.options.extensionName).get(this.options.INSERT_ANCHOR.key);
@@ -41,68 +41,67 @@ var ConfigManager = /** @class */ (function () {
         if (vscode_1.workspace.getConfiguration("files", null).get("autoSave") !== "off") {
             this.options.autoSave = true;
         }
-    };
+    }
     /**
      * DEPRECATED
      * use single line unique options instead
      */
-    ConfigManager.prototype.loadCustomOptions = function () {
-        var _this = this;
+    loadCustomOptions() {
         this.options.optionsFlag = [];
-        var editor = vscode_1.window.activeTextEditor;
+        let editor = vscode_1.window.activeTextEditor;
         if (editor === undefined) {
             return;
         }
-        for (var index = 0; index < editor.document.lineCount; index++) {
-            var lineText = editor.document.lineAt(index).text;
+        for (let index = 0; index < editor.document.lineCount; index++) {
+            let lineText = editor.document.lineAt(index).text;
             if (lineText.match(RegexStrings_1.RegexStrings.Instance.REGEXP_TOC_START)) {
-                var options = lineText.match(RegexStrings_1.RegexStrings.Instance.REGEXP_TOC_CONFIG);
+                let options = lineText.match(RegexStrings_1.RegexStrings.Instance.REGEXP_TOC_CONFIG);
                 if (options !== null) {
-                    options.forEach(function (element) {
-                        var pair = RegexStrings_1.RegexStrings.Instance.REGEXP_TOC_CONFIG_ITEM.exec(element);
+                    options.forEach(element => {
+                        let pair = RegexStrings_1.RegexStrings.Instance.REGEXP_TOC_CONFIG_ITEM.exec(element);
                         if (pair !== null) {
-                            var key = pair[1].toLocaleLowerCase();
-                            var value = pair[2];
+                            let key = pair[1].toLocaleLowerCase();
+                            let value = pair[2];
                             switch (key) {
-                                case _this.options.DEPTH_FROM.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.DEPTH_FROM.uniqueValue = _this.parseValidNumber(value);
+                                case this.options.DEPTH_FROM.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.DEPTH_FROM.uniqueValue = this.parseValidNumber(value);
                                     break;
-                                case _this.options.DEPTH_TO.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.DEPTH_TO.uniqueValue = Math.max(_this.parseValidNumber(value), _this.options.DEPTH_FROM.value);
+                                case this.options.DEPTH_TO.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.DEPTH_TO.uniqueValue = Math.max(this.parseValidNumber(value), this.options.DEPTH_FROM.value);
                                     break;
-                                case _this.options.INSERT_ANCHOR.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.INSERT_ANCHOR.uniqueValue = _this.parseBool(value);
+                                case this.options.INSERT_ANCHOR.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.INSERT_ANCHOR.uniqueValue = this.parseBool(value);
                                     break;
-                                case _this.options.WITH_LINKS.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.WITH_LINKS.uniqueValue = _this.parseBool(value);
+                                case this.options.WITH_LINKS.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.WITH_LINKS.uniqueValue = this.parseBool(value);
                                     break;
-                                case _this.options.ORDERED_LIST.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.ORDERED_LIST.uniqueValue = _this.parseBool(value);
+                                case this.options.ORDERED_LIST.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.ORDERED_LIST.uniqueValue = this.parseBool(value);
                                     break;
-                                case _this.options.UPDATE_ON_SAVE.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.UPDATE_ON_SAVE.uniqueValue = _this.parseBool(value);
+                                case this.options.UPDATE_ON_SAVE.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.UPDATE_ON_SAVE.uniqueValue = this.parseBool(value);
                                     break;
-                                case _this.options.ANCHOR_MODE.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.ANCHOR_MODE.uniqueValue = value;
+                                case this.options.ANCHOR_MODE.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.ANCHOR_MODE.uniqueValue = value;
                                     break;
-                                case _this.options.BULLET_CHAR.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.BULLET_CHAR.uniqueValue = value;
+                                case this.options.BULLET_CHAR.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.BULLET_CHAR.uniqueValue = value;
                                     break;
-                                case _this.options.DETECT_AUTO_SET_SECTION.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.DETECT_AUTO_SET_SECTION.uniqueValue = value;
+                                case this.options.DETECT_AUTO_SET_SECTION.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.DETECT_AUTO_SET_SECTION.uniqueValue = value;
                                     break;
-                                case _this.options.SENTINEL_HEADING.lowerCaseKey:
-                                    _this.options.optionsFlag.push(key);
-                                    _this.options.SENTINEL_HEADING.uniqueValue = value;
+                                case this.options.SENTINEL_HEADING.lowerCaseKey:
+                                    this.options.optionsFlag.push(key);
+                                    this.options.SENTINEL_HEADING.uniqueValue = value;
                                     break;
                             }
                         }
@@ -112,8 +111,8 @@ var ConfigManager = /** @class */ (function () {
             }
         }
         return;
-    };
-    ConfigManager.prototype.getOptionValueByKey = function (key) {
+    }
+    getOptionValueByKey(key) {
         switch (key.toLowerCase()) {
             case this.options.DEPTH_FROM.lowerCaseKey:
                 return this.options.DEPTH_FROM.value;
@@ -136,17 +135,17 @@ var ConfigManager = /** @class */ (function () {
             case this.options.SENTINEL_HEADING.lowerCaseKey:
                 return this.options.SENTINEL_HEADING.value;
         }
-    };
-    ConfigManager.prototype.parseBool = function (value) {
+    }
+    parseBool(value) {
         return value.toLocaleLowerCase() === 'true';
-    };
-    ConfigManager.prototype.parseValidNumber = function (value) {
-        var num = parseInt(value);
+    }
+    parseValidNumber(value) {
+        let num = parseInt(value);
         if (num < 1) {
             return 1;
         }
         return num;
-    };
-    return ConfigManager;
-}());
+    }
+}
 exports.ConfigManager = ConfigManager;
+//# sourceMappingURL=ConfigManager.js.map

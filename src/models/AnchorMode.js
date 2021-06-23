@@ -8,3 +8,4 @@ var AnchorMode;
     AnchorMode["ghost"] = "ghost.org";
     AnchorMode["gitlab"] = "gitlab.com";
 })(AnchorMode = exports.AnchorMode || (exports.AnchorMode = {}));
+//# sourceMappingURL=AnchorMode.js.map
