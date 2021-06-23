@@ -19,7 +19,7 @@ export function activate(context: ExtensionContext) {
     let deleteMarkdownSections = commands.registerCommand('extension.deleteMarkdownSections', () => { autoMarkdownToc.deleteMarkdownSections(); });
 
     // Events
-    let saveMarkdownToc = workspace.onDidSaveTextDocument(() => { autoMarkdownToc.onDidSaveTextDocument(); });
+    // let saveMarkdownToc = workspace.onDidSaveTextDocument(() => { autoMarkdownToc.onDidSaveTextDocument(); });
     let saveLatestDiaryLink = workspace.onDidSaveTextDocument(() => { autoMarkdownToc.onDidSaveTextDocument4Diary(); });
 
     // Add to a list of disposables which are disposed when this extension is deactivated.
@@ -30,7 +30,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(deleteMarkdownSections);
 
     context.subscriptions.push(saveLatestDiaryLink);
-    context.subscriptions.push(saveMarkdownToc);
+    // context.subscriptions.push(saveMarkdownToc);
 }
 
 // this method is called when your extension is deactivated

@@ -373,11 +373,16 @@ export class AutoMarkdownToc {
         let tocRows: string[] = [];
 
         let sentinel: string = this.configManager.options.SENTINEL_HEADING.value;
-        let beforeHeadingSentinel: Header = this.getBeforeHeadingSentinel(headerList, sentinel)
+        let beforeHeadingSentinel: Header = this.getBeforeHeadingSentinel(headerList, sentinel);
+
+        console.info(beforeHeadingSentinel);
+
+        let message: string = "header before sentinel is: " + beforeHeadingSentinel.tocWithOrder + ", sentinel is: " + sentinel;
+        window.showInformationMessage(message);
 
         // forEachはArrayのメソッド．与えられた関数を、配列の各要素に対して一度ずつ実行
         headerList.forEach(header => {
-            if (header == beforeHeadingSentinel && !header.isIgnored) {
+            if (header === beforeHeadingSentinel && !header.isIgnored) {
                 let row = this.generateTocRow(header, minimumRenderedDepth);
                 tocRows.push(row);
             }
@@ -397,7 +402,7 @@ export class AutoMarkdownToc {
         for (let index = 0; index < headerList.length; index++) {
             let header = headerList[index];
 
-            if (header.tocWithOrder == sentinel) {
+            if (header.tocWithOrder === sentinel) {
                 sentinelIndex = index;
                 break;
             }
