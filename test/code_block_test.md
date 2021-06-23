@@ -1,7 +1,8 @@
 
+Latest Diary
 <!-- TOC -->
 
-- [testssaaassss](#testssaaassss)
+- [2021-06-23](#2021-06-23)
 
 <!-- /TOC -->
 
@@ -24,6 +25,7 @@ aa
 ss
 
 # testssaaassss
+# 2021-06-23
 # テスト
 
 # ss

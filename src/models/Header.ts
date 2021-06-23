@@ -28,10 +28,13 @@ export class Header {
     public convertFromSymbol(symbol: DocumentSymbol) {
         let headerTextSplit = symbol.name.match(RegexStrings.Instance.REGEXP_HEADER_META);
 
+        console.log("header  "+headerTextSplit);
+        console.log("synbolname  "+symbol.name);
+
         if (headerTextSplit !== null) {
             this.headerMark = headerTextSplit[1];
-            this.orderedListString = headerTextSplit[2];
-            this.dirtyTitle = headerTextSplit[4];
+            this.orderedListString = headerTextSplit[3];
+            this.dirtyTitle = headerTextSplit[2];
         }
 
         this.range = new Range(symbol.range.start, new Position(symbol.range.start.line, symbol.name.length));

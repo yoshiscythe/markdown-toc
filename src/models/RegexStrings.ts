@@ -9,7 +9,7 @@ export class RegexStrings {
     REGEXP_ANCHOR = /\[.+\]\(#(.+)\)/;
     REGEXP_IGNORE_TITLE = /<!-- TOC ignore:true -->/;
 
-    REGEXP_HEADER_META = /^(\#*)\s*((\d*\.?)*)\s*(.+)/;
+    REGEXP_HEADER_META = /^(\#*)\s*(((\d*\.?)*)\s*(.+))/;
     REGEXP_UNIQUE_CONFIG_START = /\s*<!--(.*)[^\/]TOC UNIQUE CONFIGS(.*)-->/gi;
     REGEXP_UNIQUE_CONFIG_STOP = /\s*<!--(.*)\/TOC UNIQUE CONFIGS(.*)-->/gi;
     REGEXP_UNIQUE_CONFIG_LINE = /\s*<!--( *)(\w+)[:](\w+)( *)-->/gi;

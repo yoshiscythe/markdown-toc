@@ -36,10 +36,14 @@ export class HeaderManager {
             for (let index = 0; index < allHeaders.length; index++) {
                 let header = allHeaders[index];
 
+                // console.log("1"+header.dirtyTitle);
+
                 // only level of consideredDepthToInclude
                 if (header.depth > consideredDepthToInclude) {
                     continue;
                 }
+
+                // console.log("2"+header.dirtyTitle);
 
 
                 header.isIgnored = this.getIsHeaderIgnored(header, editor);
@@ -89,6 +93,8 @@ export class HeaderManager {
             let header = new Header(this.configManager.options.ANCHOR_MODE.value);
             header.convertFromSymbol(symbols[index]);
             allHeaders.push(header);
+
+            // console.log("convert"+header.dirtyTitle);
 
             let depthCount = headerLevels.get(header.depth);
 
