@@ -4,7 +4,7 @@ insert toc here
 
 <!-- TOC -->
 
-- [Test Header 1](#test-header-1)
+        - [1](#1)
 
 <!-- /TOC -->
 
@@ -20,6 +20,7 @@ insert toc here
 
 ### 2.1.1. 1
 
+# テスト
 
 #### 2.1.1.1. level 4
 

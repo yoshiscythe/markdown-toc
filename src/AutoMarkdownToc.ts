@@ -48,7 +48,7 @@ export class AutoMarkdownToc {
 
     // onDidSaveTextDocumentをフォーク
     // save時にupdateLatestDiaryLinkをやってくれそう
-    public onDidSaveTextDocument4Diary() {
+    public onWillSaveTextDocument4Diary() {
         if (!this.configManager.options.UPDATE_ON_SAVE.value) {
             return;
         }
@@ -70,9 +70,8 @@ export class AutoMarkdownToc {
             let tocRange = this.getTocRange();
 
             if (!tocRange.isSingleLine) {
-                this.updateLatestDiaryLink();
+                this.updateLatestDiaryLink().then(()=>{doc.save();});
                 this.configManager.options.isProgrammaticallySave = true;
-                doc.save();
             }
         }
     }
@@ -80,6 +79,8 @@ export class AutoMarkdownToc {
     public async updateMarkdownToc() {
         let autoMarkdownToc = this;
         let editor = window.activeTextEditor;
+
+        // console.log("DoTOC");
 
         if (editor === undefined) {
             return;
@@ -326,6 +327,7 @@ export class AutoMarkdownToc {
     }
 
     private createToc(editBuilder: TextEditorEdit, headerList: Header[], insertPosition: Position) {
+        // console.log("createTOC");
 
         let text: string[] = [];
 
@@ -358,6 +360,7 @@ export class AutoMarkdownToc {
 
     // createTocが雛形
     private createLatestDiaryLink(editBuilder: TextEditorEdit, headerList: Header[], insertPosition: Position) {
+        // console.log("createDiaryLink");
 
         let text: string[] = [];
 
@@ -375,10 +378,13 @@ export class AutoMarkdownToc {
         let sentinel: string = this.configManager.options.SENTINEL_HEADING.value;
         let beforeHeadingSentinel: Header = this.getBeforeHeadingSentinel(headerList, sentinel);
 
-        console.info(beforeHeadingSentinel);
+        // デバッグ用
+        // console.log(beforeHeadingSentinel);
+        // console.log(beforeHeadingSentinel.tocWithoutOrder);
 
-        let message: string = "header before sentinel is: " + beforeHeadingSentinel.tocWithOrder + ", sentinel is: " + sentinel;
-        window.showInformationMessage(message);
+        // デバッグ用
+        // let message: string = "header before sentinel is: " + beforeHeadingSentinel.tocWithOrder + ", sentinel is: " + sentinel;
+        // window.showInformationMessage(message);
 
         // forEachはArrayのメソッド．与えられた関数を、配列の各要素に対して一度ずつ実行
         headerList.forEach(header => {
@@ -402,13 +408,13 @@ export class AutoMarkdownToc {
         for (let index = 0; index < headerList.length; index++) {
             let header = headerList[index];
 
-            if (header.tocWithOrder === sentinel) {
+            if (header.tocWithoutOrder === sentinel) {
                 sentinelIndex = index;
                 break;
             }
         }
 
-        let beforeHeadingSentinel: Header = headerList[sentinelIndex];
+        let beforeHeadingSentinel: Header = headerList[sentinelIndex-1];
 
         return beforeHeadingSentinel
     }
